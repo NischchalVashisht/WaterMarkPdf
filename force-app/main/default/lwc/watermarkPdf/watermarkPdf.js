@@ -1,7 +1,7 @@
 import { LightningElement, api,wire } from "lwc";
 import pdflib from "@salesforce/resourceUrl/pdflib";
 import { loadScript } from "lightning/platformResourceLoader";
-import getData from '@salesforce/apex/DocData.getData';
+import getData from '@salesforce/apex/DocData.getPdf';
 
 
 export default class Watermark extends LightningElement {
@@ -11,7 +11,8 @@ export default class Watermark extends LightningElement {
     error
     ids ='' 
     firstCall =true
-  
+    pdfName = "MY PDF"
+    pdfData 
     renderedCallback() {
         
         
@@ -61,19 +62,20 @@ export default class Watermark extends LightningElement {
 
                 })
                 
-            const pdfBytes = await usConstitutionPdf.save()
-            this.saveByteArray("My PDF", pdfBytes);
+            this.pdfData = await usConstitutionPdf.save()
+        //    this.saveByteArray("My PDF", pdfBytes);
             }
 
         }
         
     }
 
-    saveByteArray(pdfName, byte) {
-        var blob = new Blob([byte], { type: "application/pdf" });
+    saveByteArray(event) {
+          
+        var blob = new Blob([this.pdfData], { type: "application/pdf" });
         var link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
-        var fileName = pdfName;
+        var fileName = this.pdfName;
         link.download = fileName;
         link.click();
     }

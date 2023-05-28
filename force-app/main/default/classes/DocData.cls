@@ -1,10 +1,8 @@
 public with sharing class DocData {
     
     @AuraEnabled
-    public static string getPdf(){
+    public static List<String> getPdf(String accountId){
         try {
-            @AuraEnabled
-            public static List<String> getPdf(String recId){
                 System.debug('ID is '+accountId);
                 Map<String,String> mapOfData = new Map<String,String>();
                 List<ContentDocumentLink> lsOfCDL = [SELECT Id, LinkedEntityId, ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId=:accountId];
@@ -25,8 +23,8 @@ public with sharing class DocData {
                        
                 }
                 return lsOfFiles; 
-            }
-        } catch (Exception e) {
+            
+        }catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
     }
